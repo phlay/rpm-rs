@@ -361,6 +361,18 @@ impl PackageBuilder {
         Ok(self)
     }
 
+    /// Add empty directory to package.
+    ///
+    /// See: %dir from specfile syntax
+    pub fn with_dir(
+        mut self,
+        options: impl Into<FileOptions>,
+    ) -> Result<Self, Error> {
+        self.add_data(Vec::new(), Timestamp::now(), options.into())?;
+        Ok(self)
+    }
+
+
     fn add_data(
         &mut self,
         content: Vec<u8>,

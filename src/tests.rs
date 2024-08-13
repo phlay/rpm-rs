@@ -48,6 +48,10 @@ However, it does nothing.",
                 .mode(0o120644)
                 .symlink("/usr/bin/awesome"),
         )?
+        .with_dir(
+            FileOptions::new("/var/lib/awesome_dir")
+                .mode(FileMode::dir(0o755))
+        )?
         .pre_install_script("echo preinst")
         .post_install_script(Scriptlet::new("echo postinst").prog(vec!["/bin/blah/bash", "-c"]))
         .pre_trans_script(Scriptlet::new("echo pretrans").flags(ScriptletFlags::EXPAND))
@@ -88,6 +92,8 @@ However, it does nothing.",
             assert_eq!(f.mode, FileMode::from(0o100644));
         } else if f.path.as_os_str() == "/usr/bin/awesome_link" {
             assert_eq!(f.mode, FileMode::from(0o120644));
+        } else if f.path.as_os_str() == "/var/lib/awesome_dir" {
+            assert_eq!(f.mode, FileMode::from(0o040755));
         }
     });
 
